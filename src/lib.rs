@@ -152,6 +152,9 @@ pub struct ResultStockPiece {
 
     /// Cut pieces to cut from this stock piece.
     pub cut_pieces: Vec<ResultCutPiece>,
+
+    /// Price of stock piece.
+    pub price: usize,
 }
 
 /// Represents a bin used for bin-packing.

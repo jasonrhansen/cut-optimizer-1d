@@ -119,6 +119,7 @@ impl From<BasicBin> for ResultStockPiece {
         Self {
             length: bin.length,
             cut_pieces: bin.cut_pieces.into_iter().map(Into::into).collect(),
+            price: bin.price,
         }
     }
 }
