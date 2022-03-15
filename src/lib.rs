@@ -29,6 +29,9 @@ use serde::{Deserialize, Serialize};
 #[cfg_attr(feature = "serialize", serde(rename_all = "camelCase"))]
 #[derive(Clone, Debug)]
 pub struct CutPiece {
+    /// Quantity of this cut piece.
+    pub quantity: usize,
+
     /// ID to be used by the caller to match up result cut pieces
     /// with the original cut piece. This ID has no meaning to the
     /// optimizer so it can be set to `None` if not needed.
@@ -77,15 +80,6 @@ impl PartialEq for UsedCutPiece {
     }
 }
 impl Eq for UsedCutPiece {}
-
-impl From<CutPieceWithId> for CutPiece {
-    fn from(cut_piece: CutPieceWithId) -> Self {
-        Self {
-            external_id: cut_piece.external_id,
-            length: cut_piece.length,
-        }
-    }
-}
 
 impl From<UsedCutPiece> for CutPieceWithId {
     fn from(used_cut_piece: UsedCutPiece) -> Self {
@@ -495,6 +489,7 @@ pub enum Error {
 }
 fn no_fit_for_cut_piece_error(cut_piece: &CutPieceWithId) -> Error {
     Error::NoFitForCutPiece(CutPiece {
+        quantity: 1,
         external_id: cut_piece.external_id,
         length: cut_piece.length,
     })
@@ -591,13 +586,16 @@ impl Optimizer {
 
     /// Add a desired cut piece that you need cut from a stock piece.
     pub fn add_cut_piece(&mut self, cut_piece: CutPiece) -> &mut Self {
-        let cut_piece = CutPieceWithId {
-            id: self.cut_pieces.len(),
-            external_id: cut_piece.external_id,
-            length: cut_piece.length,
-        };
+        for _ in 0..cut_piece.quantity {
+            let cut_piece = CutPieceWithId {
+                id: self.cut_pieces.len(),
+                external_id: cut_piece.external_id,
+                length: cut_piece.length,
+            };
 
-        self.cut_pieces.push(cut_piece);
+            self.cut_pieces.push(cut_piece);
+        }
+
         self
     }
 
@@ -660,10 +658,10 @@ impl Optimizer {
             self.optimize_with_stock_pieces::<BasicBin, _>(&self.stock_pieces.clone(), &callback)
         } else {
             // We're not allowing mixed sizes so just give an error result
-            // here. Each stock size will be optmized separately below.
+            // here. Each stock size will be optimized separately below.
             // Note: it's safe to assume `self.cut_pieces` isn't empty because
             // that's checked at the beginning of this function.
-            Err(Error::NoFitForCutPiece(self.cut_pieces[0].clone().into()))
+            Err(no_fit_for_cut_piece_error(&self.cut_pieces[0]))
         };
 
         // Optimize each stock size separately and see if any have better result than

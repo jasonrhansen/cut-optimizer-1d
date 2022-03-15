@@ -15,18 +15,22 @@ static STOCK_PIECES: &[StockPiece] = &[
 
 static CUT_PIECES: &[CutPiece] = &[
     CutPiece {
+        quantity: 1,
         external_id: Some(1),
         length: 30,
     },
     CutPiece {
+        quantity: 1,
         external_id: Some(2),
         length: 30,
     },
     CutPiece {
+        quantity: 1,
         external_id: Some(3),
         length: 30,
     },
     CutPiece {
+        quantity: 1,
         external_id: Some(4),
         length: 30,
     },
@@ -90,6 +94,7 @@ fn optimize_non_fitting_cut_piece() {
             price: 0,
         })
         .add_cut_piece(CutPiece {
+            quantity: 1,
             external_id: Some(1),
             length: 11,
         })
@@ -108,10 +113,12 @@ fn optimize_no_allow_mixed_stock_sizes() {
     let solution = Optimizer::new()
         .add_stock_pieces(STOCK_PIECES.iter().cloned().collect::<Vec<_>>())
         .add_cut_piece(CutPiece {
+            quantity: 1,
             external_id: Some(1),
             length: 96,
         })
         .add_cut_piece(CutPiece {
+            quantity: 1,
             external_id: Some(2),
             length: 120,
         })
@@ -146,11 +153,8 @@ fn optimize_different_stock_piece_prices() {
             quantity: None,
         })
         .add_cut_piece(CutPiece {
+            quantity: 2,
             external_id: Some(1),
-            length: 50,
-        })
-        .add_cut_piece(CutPiece {
-            external_id: Some(2),
             length: 50,
         })
         .set_cut_width(1)
@@ -183,11 +187,8 @@ fn optimize_same_stock_piece_prices() {
             quantity: None,
         })
         .add_cut_piece(CutPiece {
+            quantity: 2,
             external_id: Some(1),
-            length: 50,
-        })
-        .add_cut_piece(CutPiece {
-            external_id: Some(2),
             length: 50,
         })
         .set_cut_width(1)
@@ -211,10 +212,7 @@ fn optimize_stock_quantity_too_low() {
             quantity: Some(1),
         })
         .add_cut_piece(CutPiece {
-            external_id: None,
-            length: 96,
-        })
-        .add_cut_piece(CutPiece {
+            quantity: 2,
             external_id: None,
             length: 96,
         })
@@ -237,10 +235,7 @@ fn optimize_stock_quantity() {
             quantity: Some(2),
         })
         .add_cut_piece(CutPiece {
-            external_id: None,
-            length: 96,
-        })
-        .add_cut_piece(CutPiece {
+            quantity: 2,
             external_id: None,
             length: 96,
         })
@@ -266,14 +261,12 @@ fn optimize_stock_quantity_multiple() {
             quantity: Some(1),
         })
         .add_cut_piece(CutPiece {
+            quantity: 2,
             external_id: None,
             length: 96,
         })
         .add_cut_piece(CutPiece {
-            external_id: None,
-            length: 96,
-        })
-        .add_cut_piece(CutPiece {
+            quantity: 1,
             external_id: None,
             length: 192,
         })
@@ -294,30 +287,37 @@ fn optimize_one_stock_piece_several_cut_pieces() {
             quantity: Some(1),
         })
         .add_cut_piece(CutPiece {
+            quantity: 1,
             external_id: None,
             length: 8,
         })
         .add_cut_piece(CutPiece {
+            quantity: 1,
             external_id: None,
             length: 9,
         })
         .add_cut_piece(CutPiece {
+            quantity: 1,
             external_id: None,
             length: 10,
         })
         .add_cut_piece(CutPiece {
+            quantity: 1,
             external_id: None,
             length: 12,
         })
         .add_cut_piece(CutPiece {
+            quantity: 1,
             external_id: None,
             length: 13,
         })
         .add_cut_piece(CutPiece {
+            quantity: 1,
             external_id: None,
             length: 14,
         })
         .add_cut_piece(CutPiece {
+            quantity: 1,
             external_id: None,
             length: 15,
         })
@@ -343,10 +343,7 @@ fn optimize_stock_duplicate_cut_piece() {
             quantity: Some(1),
         })
         .add_cut_piece(CutPiece {
-            external_id: None,
-            length: 96,
-        })
-        .add_cut_piece(CutPiece {
+            quantity: 2,
             external_id: None,
             length: 96,
         })
@@ -369,12 +366,11 @@ fn optimize_32_cut_pieces_on_1_stock_piece() {
 
     let num_cut_pieces = 32;
 
-    for i in 0..num_cut_pieces {
-        optimizer.add_cut_piece(CutPiece {
-            external_id: Some(i),
-            length: 10,
-        });
-    }
+    optimizer.add_cut_piece(CutPiece {
+        quantity: num_cut_pieces,
+        external_id: Some(1),
+        length: 10,
+    });
 
     let solution = optimizer
         .set_cut_width(1)
@@ -401,12 +397,11 @@ fn optimize_32_cut_pieces_on_2_stock_pieces_zero_cut_width() {
 
     let num_cut_pieces = 32;
 
-    for i in 0..num_cut_pieces {
-        optimizer.add_cut_piece(CutPiece {
-            external_id: Some(i),
-            length: 10,
-        });
-    }
+    optimizer.add_cut_piece(CutPiece {
+        quantity: num_cut_pieces,
+        external_id: Some(1),
+        length: 10,
+    });
 
     let solution = optimizer
         .set_cut_width(0)
@@ -433,12 +428,11 @@ fn optimize_32_cut_pieces_on_2_stock_piece() {
 
     let num_cut_pieces = 32;
 
-    for i in 0..num_cut_pieces {
-        optimizer.add_cut_piece(CutPiece {
-            external_id: Some(i),
-            length: 10,
-        });
-    }
+    optimizer.add_cut_piece(CutPiece {
+        quantity: num_cut_pieces,
+        external_id: Some(1),
+        length: 10,
+    });
 
     let solution = optimizer
         .set_cut_width(1)
@@ -463,12 +457,11 @@ fn optimize_64_cut_pieces_on_2_stock_pieces() {
 
     let num_cut_pieces = 64;
 
-    for i in 0..num_cut_pieces {
-        optimizer.add_cut_piece(CutPiece {
-            external_id: Some(i),
-            length: 10,
-        });
-    }
+    optimizer.add_cut_piece(CutPiece {
+        quantity: num_cut_pieces,
+        external_id: Some(1),
+        length: 10,
+    });
 
     let solution = optimizer
         .set_cut_width(1)
@@ -502,12 +495,11 @@ fn optimize_random_cut_pieces() {
 
     let num_cut_pieces = 30;
 
-    for i in 0..num_cut_pieces {
-        optimizer.add_cut_piece(CutPiece {
-            external_id: Some(i),
-            length: rng.gen_range(1..=120),
-        });
-    }
+    optimizer.add_cut_piece(CutPiece {
+        quantity: num_cut_pieces,
+        external_id: Some(1),
+        length: rng.gen_range(1..=120),
+    });
 
     let solution = optimizer
         .set_cut_width(1)
