@@ -509,3 +509,33 @@ fn optimize_random_cut_pieces() {
 
     sanity_check_solution(&solution, num_cut_pieces);
 }
+
+#[test]
+fn optimize_stock_quantity_1() {
+    let mut optimizer = Optimizer::new();
+    optimizer.add_stock_piece(StockPiece {
+        quantity: Some(1),
+        length: 96,
+        price: 0,
+    });
+
+    optimizer.add_cut_piece(CutPiece {
+        quantity: 1,
+        external_id: Some(1),
+        length: 50,
+    });
+
+    optimizer.add_cut_piece(CutPiece {
+        quantity: 1,
+        external_id: Some(1),
+        length: 20,
+    });
+
+    let solution = optimizer
+        .set_cut_width(1)
+        .set_random_seed(1)
+        .optimize(|_| {})
+        .unwrap();
+
+    sanity_check_solution(&solution, 2);
+}
