@@ -537,5 +537,31 @@ fn optimize_stock_quantity_1() {
         .optimize(|_| {})
         .unwrap();
 
+    assert_eq!(solution.stock_pieces.len(), 1);
     sanity_check_solution(&solution, 2);
+}
+
+#[test]
+fn optimize_stock_quantity_2() {
+    let mut optimizer = Optimizer::new();
+    optimizer.add_stock_piece(StockPiece {
+        quantity: Some(2),
+        length: 200,
+        price: 130,
+    });
+
+    optimizer.add_cut_piece(CutPiece {
+        quantity: 6,
+        external_id: Some(1),
+        length: 50,
+    });
+
+    let solution = optimizer
+        .set_cut_width(2)
+        .set_random_seed(1)
+        .optimize(|_| {})
+        .unwrap();
+
+    assert_eq!(solution.stock_pieces.len(), 2);
+    sanity_check_solution(&solution, 6);
 }
