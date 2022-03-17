@@ -1,12 +1,13 @@
 use super::*;
 
+use smallvec::SmallVec;
 use std::borrow::Borrow;
 
 #[derive(Clone, Debug)]
 pub(crate) struct BasicBin {
     length: usize,
     blade_width: usize,
-    cut_pieces: Vec<UsedCutPiece>,
+    cut_pieces: SmallVec<[UsedCutPiece; 4]>,
     price: usize,
 }
 
