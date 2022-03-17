@@ -19,7 +19,7 @@ fnv = "1.0"
 serde = { version = "1.0", features=["derive"], optional = true }
 
 [dev-dependencies]
-criterion = "0.3"
+criterion = { version = "0.3", features=["html_reports"] }
 
 [[bench]]
 name = 'optimizer'

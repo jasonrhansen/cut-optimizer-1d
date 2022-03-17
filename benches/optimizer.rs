@@ -1,3 +1,5 @@
+use std::time::Duration;
+
 use criterion::*;
 use cut_optimizer_1d::*;
 use rand::prelude::*;
@@ -51,5 +53,10 @@ pub fn benchmark_optimize(c: &mut Criterion) {
     });
 }
 
-criterion_group!(benches, benchmark_optimize);
+criterion_group! {
+    name = benches;
+    config = Criterion::default().sample_size(100).measurement_time(Duration::from_secs(20));
+    targets = benchmark_optimize
+}
+
 criterion_main!(benches);
